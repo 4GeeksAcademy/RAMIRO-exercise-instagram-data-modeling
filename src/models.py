@@ -8,6 +8,7 @@ from eralchemy2 import render_er
 Base = declarative_base()
 
 tags = Table('User-Follower',
+             Base.metadata,
     Column('user_id', Integer, ForeignKey('user.id'), primary_key=True),
     Column('follower_id', Integer, ForeignKey('user.id'), primary_key=True)
 )
@@ -53,9 +54,11 @@ class Follower(Base):
     __tablename__ = 'follower'
     # Here we define columns for the table address.
     # Notice that each column is also a normal Python instance attribute.
-    # id= Column(Integer, primary_key=True)
-    user_from_id = Column(Integer, ForeignKey('user.id'))
-    user_to_id = Column(Integer, ForeignKey('user.id'))
+    id= Column(Integer, primary_key=True)
+    # user_from_id = Column(Integer, ForeignKey('user.id'))
+    # user_to_id = Column(Integer, ForeignKey('user.id'))
+    # Media = relationship(Media)
+    # url = Column(String(250), ForeignKey('media.id'))
     
 
 ## Draw from SQLAlchemy base
