@@ -1,13 +1,13 @@
 import os
 import sys
 from sqlalchemy import Column, ForeignKey, Integer, String, Table
-from sqlalchemy.orm import relationship, declarative_base
+from sqlalchemy.orm import relationship, declarative_base, backref
 from sqlalchemy import create_engine
 from eralchemy2 import render_er
 
 Base = declarative_base()
 
-tags = Table('User-Follower',
+user_follower = Table('User-Follower',
              Base.metadata,
     Column('user_id', Integer, ForeignKey('user.id'), primary_key=True),
     Column('follower_id', Integer, ForeignKey('user.id'), primary_key=True)
@@ -22,6 +22,10 @@ class User(Base):
     first_name= Column(String(250), nullable=False)
     last_name= Column(String(250), nullable=False)
     email= Column(String(250), nullable=False)
+    followers = relationship('Follower', secondary=user_follower, lazy='subquery',
+        backref=backref('pages', lazy=True))
+    user_one_to_many = relationship('User', backref='comment', lazy=True)
+    user_one_to_many1 = relationship('User', backref='post', lazy=True)
 
 
 class Comment(Base):
@@ -40,6 +44,8 @@ class Post(Base):
     # Notice that each column is also a normal Python instance attribute.
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('user.id'))
+    post_one_to_many = relationship('Post', backref='comment', lazy=True)
+    post_one_to_many1 = relationship('Post', backref='media', lazy=True)
     
 class Media(Base):
     __tablename__ = 'media'
